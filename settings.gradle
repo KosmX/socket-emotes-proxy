@@ -1,0 +1,5 @@
+rootProject.name = 'random_server-client'
+include 'server'
+include 'client'
+include 'common'
+

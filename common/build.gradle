@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'io.github.kosmx.nettytest'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven{
+        name = "KosmX's maven"
+        url = "https://kosmx.duckdns.org/maven"
+    }
+}
+
+dependencies {
+
+    implementation("io.netty:netty-all:4.1.66.Final")
+    implementation("io.github.kosmx.emotes:emotesAPI:2.1-SNAPSHOT-4f7eed1")
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'org.gradle.sample'
+            artifactId = 'library'
+            version = '1.1'
+
+            from components.java
+        }
+    }
+}
