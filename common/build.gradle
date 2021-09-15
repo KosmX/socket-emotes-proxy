@@ -6,14 +6,6 @@ plugins {
 group 'io.github.kosmx.nettytest'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    maven{
-        name = "KosmX's maven"
-        url = "https://kosmx.duckdns.org/maven"
-    }
-}
-
 dependencies {
 
     implementation("io.netty:netty-all:4.1.66.Final")

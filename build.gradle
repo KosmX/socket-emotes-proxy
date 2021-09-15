@@ -9,6 +9,17 @@ repositories {
     mavenCentral()
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+        maven{
+            name = "KosmX's maven"
+            url = "https://kosmx.duckdns.org/maven"
+        }
+    }
+
+}
+
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
