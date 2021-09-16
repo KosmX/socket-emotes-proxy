@@ -13,7 +13,7 @@ public class BinaryDecoder extends ReplayingDecoder<ByteBuffer> {
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         byte[] bytes = new byte[in.readableBytes()];
         //ByteBuffer buf = ByteBuffer.allocate(in.readInt());
-        in.readBytes(bytes);
+        in.readBytes(bytes); //It will fail until we have the whole message. or IDK
         out.add(ByteBuffer.wrap(bytes));
     }
 }

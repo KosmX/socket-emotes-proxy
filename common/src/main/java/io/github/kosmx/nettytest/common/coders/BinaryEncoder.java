@@ -4,10 +4,8 @@ import io.github.kosmx.emotes.api.proxy.INetworkInstance;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.handler.codec.ReplayingDecoder;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 public class BinaryEncoder extends MessageToByteEncoder<ByteBuffer> {
     @Override
