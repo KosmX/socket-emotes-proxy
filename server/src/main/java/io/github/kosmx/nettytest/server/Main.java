@@ -14,25 +14,6 @@ public class Main {
 
     //This will be a standalone program anyway
     public static void main(String[] args) {
-        EventLoopGroup boss = new NioEventLoopGroup();
-        EventLoopGroup workers = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(boss, workers).channel(NioServerSocketChannel.class);
-            
-            b.childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) {
-                    ch.pipeline().addLast(new BinaryDecoder(), new BinaryEncoder(), new ServerHandler());
-                }
-            });
-
-            b.option(ChannelOption.SO_BACKLOG, 128);
-            b.childOption(ChannelOption.SO_KEEPALIVE, true);
-        }finally {
-            boss.shutdownGracefully();
-            workers.shutdownGracefully();
-        }
     }
 
 }
