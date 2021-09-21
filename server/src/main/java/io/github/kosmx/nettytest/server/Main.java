@@ -14,6 +14,8 @@ public class Main {
 
     //This will be a standalone program anyway
     public static void main(String[] args) {
+        System.out.println("The server does NOT encrypt nor verify the clients");
+        System.out.println("Do not use this to send sensitive data");
     }
 
 }

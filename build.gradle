@@ -1,5 +1,12 @@
+buildscript {
+    dependencies {
+        classpath "io.freefair.gradle:lombok-plugin:6.2.0"
+    }
+}
+
 plugins {
     id 'java'
+    id "com.github.johnrengelman.shadow" version "7.0.0" apply false
 }
 
 group 'io.github.kosmx.nettytest'
@@ -10,13 +17,20 @@ repositories {
 }
 
 allprojects {
+    apply plugin: "io.freefair.lombok"
     repositories {
         mavenCentral()
         maven{
             name = "KosmX's maven"
             url = "https://kosmx.duckdns.org/maven"
         }
+        maven {
+            name "Mojang maven"
+            url "https://libraries.minecraft.net"
+        }
     }
+
+
 
 }
 
