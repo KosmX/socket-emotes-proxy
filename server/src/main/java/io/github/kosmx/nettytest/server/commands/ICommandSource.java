@@ -4,4 +4,6 @@ import io.github.kosmx.nettytest.server.Server;
 
 public interface ICommandSource {
     Server getServer();
+
+    boolean hasAdminRights();
 }

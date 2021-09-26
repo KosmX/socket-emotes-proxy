@@ -13,4 +13,9 @@ public class ServerCommandSource implements ICommandSource{
     public Server getServer() {
         return server;
     }
+
+    @Override
+    public boolean hasAdminRights() {
+        return true;
+    }
 }

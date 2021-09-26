@@ -11,7 +11,7 @@ import java.util.Scanner;
 public final class CommandHandler extends Thread {
     final Server server;
 
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     CommandDispatcher<ICommandSource> dispatcher = new CommandDispatcher<>();
 
     final ServerCommandSource commandSource;
@@ -25,13 +25,15 @@ public final class CommandHandler extends Thread {
     @Override
     public void run(){
 
+        Commands.registerCommands(dispatcher);
+
         loop();
 
     }
 
     public void loop(){
         while(true){
-            if(server.getState() == ServerState.STOPPING) return;
+            if(server.getState().getOrder() >= ServerState.CLOSING.getOrder()) return;
             String in = scanner.nextLine();
             try {
                 dispatcher.execute(dispatcher.parse(in, commandSource));

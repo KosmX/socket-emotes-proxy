@@ -20,4 +20,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("Error: invalid message type: " + msg.getClass());
         }
     }
+
+    //ticking. 20 times every second
+    public void tick(){
+
+    }
+
+    /**
+     * Close EVERY connections
+     */
+    public void closeConnection(){
+
+    }
 }

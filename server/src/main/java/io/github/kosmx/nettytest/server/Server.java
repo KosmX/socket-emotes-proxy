@@ -4,6 +4,7 @@ import io.github.kosmx.nettytest.common.coders.ProtocolEncoder;
 import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -11,18 +12,17 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Supplier;
 
 public final class Server {
-    @Setter
+
     @Getter
     private ServerState state = ServerState.INIT;
+
+    private final Timer ticker = new Timer();
 
 
     private final Map<Integer, Supplier<IMessage>> protocols = new HashMap<>();
@@ -30,6 +30,7 @@ public final class Server {
     @Getter
     private final Set<ServerHandler> connections = new CopyOnWriteArraySet<>();
 
+    ChannelFuture channel;
 
     public void run(){
         EventLoopGroup boss = new NioEventLoopGroup();
@@ -51,14 +52,50 @@ public final class Server {
             b.option(ChannelOption.SO_BACKLOG, 128);
             b.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            b.bind(25564);//TODO port from command line
+            channel = b.bind(25564);//TODO port from command line
 
-            this.state = ServerState.RUNNING;
-            //TODO init command handler
+            this.running();
+            channel.sync();
 
-        }finally {
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
             boss.shutdownGracefully();
             workers.shutdownGracefully();
         }
+    }
+
+    private void running(){
+        this.state = ServerState.RUNNING;
+        startTickThread();
+    }
+
+    public void close(){
+        this.state = ServerState.STOPPING;
+        connections.forEach(ServerHandler::closeConnection);
+    }
+
+    private void shutDown(){
+        this.state = ServerState.STOPPING;
+
+        ticker.cancel();
+
+        channel.channel().closeFuture();
+    }
+
+    private void startTickThread(){
+        ticker.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                tick();
+            }
+        }, 0, 50);
+    }
+
+    private void tick(){
+        if(state.getOrder() >= ServerState.CLOSING.getOrder() && connections.size() == 0){
+            shutDown();
+        }
+        connections.forEach(ServerHandler::tick);
     }
 }
