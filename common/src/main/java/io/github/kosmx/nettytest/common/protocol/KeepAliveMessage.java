@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * To keep-alive the channel
  */
-public abstract class KeepAliveMessage implements IMessage {
+public class KeepAliveMessage implements IMessage {
 
     @Override
     public int getID() {
@@ -20,5 +20,10 @@ public abstract class KeepAliveMessage implements IMessage {
     @Override
     public void write(ByteBuf out) throws Exception {
         //same goes here
+    }
+
+    @Override
+    public void apply(Object obj) {
+
     }
 }

@@ -3,6 +3,8 @@ package io.github.kosmx.nettytest.server;
 import io.github.kosmx.nettytest.common.coders.ProtocolEncoder;
 import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
+import io.github.kosmx.nettytest.common.protocol.KeepAliveMessage;
+import io.github.kosmx.nettytest.server.test.TestTextMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -31,6 +33,17 @@ public final class Server {
     private final Set<ServerHandler> connections = new CopyOnWriteArraySet<>();
 
     ChannelFuture channel;
+
+    public Server(){
+        init();
+        run();
+    }
+
+    public void init(){
+        this.state = ServerState.INIT;
+        protocols.put(1, KeepAliveMessage::new);
+        protocols.put(9, TestTextMessage::new);
+    }
 
     public void run(){
         EventLoopGroup boss = new NioEventLoopGroup();

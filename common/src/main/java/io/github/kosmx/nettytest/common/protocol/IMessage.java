@@ -33,5 +33,5 @@ public interface IMessage {
      * Called, when message is received.
      * It may put the data into a processing list, or do whatever it can. Just don't throw an {@link Exception}
      */
-    void apply();
+    void apply(Object obj);
 }
