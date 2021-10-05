@@ -1,3 +1,25 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'Architectury maven'
+            url = 'https://maven.architectury.dev/'
+        }
+        maven {
+            name = 'hell'
+            url = 'https://maven.minecraftforge.net/'
+            content{
+                excludeGroupByRegex "org\\.eclipse\\.?.*"
+            }
+        }
+    }
+}
+
+
 rootProject.name = 'random_server-client'
 include 'common'
 include 'server'

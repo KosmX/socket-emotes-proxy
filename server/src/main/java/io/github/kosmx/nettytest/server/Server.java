@@ -1,5 +1,6 @@
 package io.github.kosmx.nettytest.server;
 
+import io.github.kosmx.nettytest.common.AbstractChannelHandler;
 import io.github.kosmx.nettytest.common.coders.ProtocolEncoder;
 import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
@@ -30,7 +31,7 @@ public final class Server {
     private final Map<Integer, Supplier<IMessage>> protocols = new HashMap<>();
 
     @Getter
-    private final Set<ServerHandler> connections = new CopyOnWriteArraySet<>();
+    private final Set<AbstractChannelHandler> connections = new CopyOnWriteArraySet<>();
 
     ChannelFuture channel;
 
@@ -85,7 +86,7 @@ public final class Server {
 
     public void close(){
         this.state = ServerState.STOPPING;
-        connections.forEach(ServerHandler::closeConnection);
+        connections.forEach(AbstractChannelHandler::closeConnection);
     }
 
     private void shutDown(){
@@ -109,6 +110,6 @@ public final class Server {
         if(state.getOrder() >= ServerState.CLOSING.getOrder() && connections.size() == 0){
             shutDown();
         }
-        connections.forEach(ServerHandler::tick);
+        connections.forEach(AbstractChannelHandler::tick);
     }
 }

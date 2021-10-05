@@ -1,22 +1,53 @@
 plugins {
     id 'java'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id 'dev.architectury.loom' version '0.10.0-SNAPSHOT'
+
+}
+
+architectury{
+    platformSetupLoomIde()
+    fabric()
+    minecraft = "1.17.1"
 }
 
 group 'io.github.kosmx.nettytest'
 version '1.0-SNAPSHOT'
+archivesBaseName = project.archives_base_name
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    
-    implementation("io.netty:netty-all:4.1.66.Final")
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation project(":common")
+    
+    //implementation("io.netty:netty-all:4.1.66.Final")
+
+    modRuntimeOnly( files("emotecraft-for-MC1.17.1-2.1-SNAPSHOT-07f79c3-fabric.jar"))
+
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
 }
 
-test {
-    useJUnitPlatform()
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+
+    // Minecraft 1.17 (21w19a) upwards uses Java 16.
+    it.options.release = 16
 }
