@@ -20,7 +20,7 @@ allprojects {
     apply plugin: "io.freefair.lombok"
     repositories {
         mavenCentral()
-        maven{
+        maven {
             name = "KosmX's maven"
             url = "https://kosmx.duckdns.org/maven"
         }
@@ -29,9 +29,6 @@ allprojects {
             url "https://libraries.minecraft.net"
         }
     }
-
-
-
 }
 
 dependencies {
