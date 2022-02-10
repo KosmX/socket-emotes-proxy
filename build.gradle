@@ -22,7 +22,7 @@ allprojects {
         mavenCentral()
         maven {
             name = "KosmX's maven"
-            url = "https://kosmx.duckdns.org/maven"
+            url = "https://maven.kosmx.dev"
         }
         maven {
             name "Mojang maven"
