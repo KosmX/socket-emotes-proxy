@@ -106,7 +106,7 @@ public final class Server {
 
         ticker.cancel();
 
-        channel.channel().closeFuture();
+        channel.channel().close();
     }
 
     private void startTickThread(){
