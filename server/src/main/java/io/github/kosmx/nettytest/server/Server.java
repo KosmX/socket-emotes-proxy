@@ -19,6 +19,7 @@ import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class Server {
@@ -60,7 +61,9 @@ public final class Server {
                     //ch.config().setOption(ChannelOption.TCP_NODELAY, true);
 
                     System.out.println("Connecting client");
-                    ch.pipeline().addLast(new ProtocolEncoder(), new MapConsumerDecoder(protocols), new ServerHandler());
+                    ServerHandler handler = new ServerHandler(Server.this);
+                    connections.add(handler);
+                    ch.pipeline().addLast(new ProtocolEncoder(), new MapConsumerDecoder(protocols), handler);
                 }
             });
 
@@ -116,6 +119,7 @@ public final class Server {
     }
 
     private void tick(){
+        //System.out.println("server ticking");
         if(state.getOrder() >= ServerState.CLOSING.getOrder() && connections.size() == 0){
             shutDown();
         }

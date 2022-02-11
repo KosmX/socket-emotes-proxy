@@ -17,6 +17,14 @@ public final class Commands {
             return 0;
         }));
 
+        dispatcher.register(literal("list").executes(c -> {
+            ICommandSource commandSource = c.getSource();
+            if (commandSource.hasAdminRights()) {
+                System.out.println(commandSource.getServer().getConnections());
+                return 1;
+            }
+            return 0;
+        }));
     }
 
     private static LiteralArgumentBuilder<ICommandSource> literal(String s){

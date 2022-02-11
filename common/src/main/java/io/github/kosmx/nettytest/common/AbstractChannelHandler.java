@@ -17,7 +17,7 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public final void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof IMessage message) {
             if (message instanceof KeepAliveMessage) {
                 this.lastMessage = 0;
@@ -39,9 +39,11 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
 
     //ticking. 20 times every second
     public void tick(){
+        //System.out.println("test");
         if(lastMessage++ > 150){
+            System.out.println("TIMEOUT: " + this.ctx);
             try {
-                this.ctx.channel().closeFuture().sync();
+                this.ctx.channel().close().sync();
             }catch (Exception e){
                 ctx.channel().disconnect();
             }
