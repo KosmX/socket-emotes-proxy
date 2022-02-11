@@ -9,13 +9,14 @@ public class StandaloneClient {
 
     private static final Timer ticker = new Timer();
 
-    static String host;
-    static int port;
+    static String host = "localhost";
+    static int port = 25564;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         var client = new ClientHandler();
+        client.run(host, port);
         startTickThread(client);
-        new ClientHandler().run(host, port);
+        client.waitForExit();
         ticker.cancel();
     }
 

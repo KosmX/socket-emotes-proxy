@@ -5,6 +5,7 @@ import io.github.kosmx.nettytest.common.coders.ProtocolEncoder;
 import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
 import io.github.kosmx.nettytest.common.protocol.KeepAliveMessage;
+import io.github.kosmx.nettytest.server.commands.CommandHandler;
 import io.github.kosmx.nettytest.server.test.TestTextMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -37,16 +38,16 @@ public final class Server {
 
     public Server(){
         init();
-        run();
+        run(25564);
     }
 
     public void init(){
         this.state = ServerState.INIT;
-        protocols.put(1, KeepAliveMessage::new);
         protocols.put(9, TestTextMessage::new);
     }
 
-    public void run(){
+    public void run(int port){
+        protocols.put(1, KeepAliveMessage::new); //Core function
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup workers = new NioEventLoopGroup();
         try {
@@ -56,9 +57,9 @@ public final class Server {
             b.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) {
-                    ch.config().setOption(ChannelOption.TCP_NODELAY, true);
+                    //ch.config().setOption(ChannelOption.TCP_NODELAY, true);
 
-                    
+                    System.out.println("Connecting client");
                     ch.pipeline().addLast(new ProtocolEncoder(), new MapConsumerDecoder(protocols), new ServerHandler());
                 }
             });
@@ -66,11 +67,18 @@ public final class Server {
             b.option(ChannelOption.SO_BACKLOG, 128);
             b.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            channel = b.bind(25564);//TODO port from command line
+            channel = b.bind(port).sync();//TODO port from command line
+            System.out.println("Server started on port " + port);
+
+            CommandHandler commandHandler = new CommandHandler(this);
+            commandHandler.setDaemon(true); //daemons
+            commandHandler.start();
 
             this.running();
-            channel.sync();
+            channel.channel().closeFuture().sync();
+            System.out.println("Server is shutting down");
 
+            commandHandler.interrupt();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -82,6 +90,7 @@ public final class Server {
     private void running(){
         this.state = ServerState.RUNNING;
         startTickThread();
+        System.out.println("Server is now running");
     }
 
     public void close(){
