@@ -1,5 +1,6 @@
 package io.github.kosmx.nettytest.common.protocol;
 
+import io.github.kosmx.nettytest.common.AbstractChannelHandler;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -33,5 +34,5 @@ public interface IMessage {
      * Called, when message is received.
      * It may put the data into a processing list, or do whatever it can. Just don't throw an {@link Exception}
      */
-    void apply(Object obj);
+    void apply(AbstractChannelHandler obj);
 }

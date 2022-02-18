@@ -63,12 +63,15 @@ public class ClientHandler extends AbstractChannelHandler {
     @Override
     public void tick() {
         super.tick();//Always call it or I'm dead
+        /*
         if (testCounter++ > 100) {
             var message = new TextMessage();
             message.setMsg("Hello from the client");
+            System.out.println("sending hello packet");
             sendMessage(message);
             testCounter = 0;
         }
+         */
     }
 
 

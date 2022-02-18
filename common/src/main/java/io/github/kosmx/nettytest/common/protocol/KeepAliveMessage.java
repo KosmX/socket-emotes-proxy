@@ -1,5 +1,6 @@
 package io.github.kosmx.nettytest.common.protocol;
 
+import io.github.kosmx.nettytest.common.AbstractChannelHandler;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -23,7 +24,7 @@ public class KeepAliveMessage implements IMessage {
     }
 
     @Override
-    public void apply(Object obj) {
+    public void apply(AbstractChannelHandler obj) {
 
     }
 }

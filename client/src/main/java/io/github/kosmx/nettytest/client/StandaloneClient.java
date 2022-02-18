@@ -1,5 +1,6 @@
 package io.github.kosmx.nettytest.client;
 
+import io.github.kosmx.nettytest.client.protocol.TextMessage;
 import io.github.kosmx.nettytest.common.AbstractChannelHandler;
 
 import java.util.Timer;
@@ -14,10 +15,17 @@ public class StandaloneClient {
 
     public static void main(String[] args) throws InterruptedException {
         var client = new ClientHandler();
+        client.addProtocol(9, TextMessage::new);
+        AsyncIO ioThread = new AsyncIO(client);
+        ioThread.setDaemon(true);
         client.run(host, port);
         startTickThread(client);
+        ioThread.start();
         client.waitForExit();
         ticker.cancel();
+        ticker.purge();
+        System.out.println("Server disconnected, exiting");
+        System.exit(0);
     }
 
 
