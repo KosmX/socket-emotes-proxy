@@ -8,6 +8,12 @@ import io.github.kosmx.nettytest.common.protocol.AbstractByteBufferMessage;
 import java.nio.ByteBuffer;
 
 public class EmoteMessage extends AbstractByteBufferMessage {
+
+    @Override
+    public int getID() {
+        return 16;
+    }
+
     @Override
     public void apply(AbstractChannelHandler obj) {
         if (obj instanceof ClientHandler clientHandler) {
