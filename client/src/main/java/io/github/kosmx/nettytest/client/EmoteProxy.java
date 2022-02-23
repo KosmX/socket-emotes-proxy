@@ -22,6 +22,7 @@ public class EmoteProxy extends AbstractNetworkInstance {
         this.clientHandler = new ClientHandler();
         clientHandler.addProtocol(9, ChatMessage::new);
         clientHandler.addProtocol(16, EmoteMessage::new);
+        clientHandler.setEmoteProxy(this);
     }
 
     public void connect(String address, int port) throws InterruptedException {

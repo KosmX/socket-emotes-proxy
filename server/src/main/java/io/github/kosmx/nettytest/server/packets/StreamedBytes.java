@@ -7,6 +7,11 @@ import io.github.kosmx.nettytest.server.ServerHandler;
 import java.security.InvalidParameterException;
 
 public class StreamedBytes extends AbstractByteBufferMessage {
+    @Override
+    public int getID() {
+        return 16;
+    }
+
 
     @Override
     public void apply(AbstractChannelHandler obj) {
