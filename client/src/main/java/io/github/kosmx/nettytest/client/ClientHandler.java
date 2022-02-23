@@ -1,6 +1,5 @@
 package io.github.kosmx.nettytest.client;
 
-import io.github.kosmx.nettytest.client.protocol.TextMessage;
 import io.github.kosmx.nettytest.common.AbstractChannelHandler;
 import io.github.kosmx.nettytest.common.coders.ProtocolEncoder;
 import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
@@ -15,7 +14,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -27,6 +29,11 @@ public class ClientHandler extends AbstractChannelHandler {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     private int testCounter = 50;
+
+    @Nullable
+    @Getter
+    @Setter
+    private EmoteProxy emoteProxy;
 
     @Override
     protected boolean handleMessage(IMessage message) {
@@ -62,6 +69,7 @@ public class ClientHandler extends AbstractChannelHandler {
 
     @Override
     public void tick() {
+        if (!isAlive()) return;
         super.tick();//Always call it or I'm dead
         /*
         if (testCounter++ > 100) {
@@ -83,5 +91,9 @@ public class ClientHandler extends AbstractChannelHandler {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public boolean isAlive() {
+        return (f != null) && f.channel().isOpen();
     }
 }

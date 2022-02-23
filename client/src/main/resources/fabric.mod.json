@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "emotex_proxy",
+  "version": "${version}",
+
+  "name": "EmoteX example proxy",
+  "description": "Test if I can use socket to create a proxy for Emotecraft mods",
+  "authors": [
+    "KosmX"
+  ],
+  "contact": {
+    "homepage": "https://kosmx.dev",
+    "sources": "https://github.com/KosmX/emotes"
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+    ],
+    "client": [
+      "io.github.kosmx.nettytest.client.FabricLoader"
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.10",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17",
+    "emotecraft": ">=2.1"
+  }
+}
