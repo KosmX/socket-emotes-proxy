@@ -6,10 +6,7 @@ import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
 import io.github.kosmx.nettytest.common.protocol.KeepAliveMessage;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 
@@ -22,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@ChannelHandler.Sharable
 public class ClientHandler extends AbstractChannelHandler {
 
     private final Map<Integer, Supplier<IMessage>> protocols = new HashMap<>();

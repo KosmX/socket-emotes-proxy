@@ -7,6 +7,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.*;
@@ -20,6 +23,9 @@ public class FabricLoader implements ClientModInitializer {
         io.github.kosmx.emotes.api.proxy.EmotesProxyManager.registerProxyInstance(proxy);
 
         this.addCommands();
+        ClientTickEvents.END_CLIENT_TICK.register(client -> proxy.tick());
+
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> proxy.disconnect());
     }
 
     public void addCommands() {

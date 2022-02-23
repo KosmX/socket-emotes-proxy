@@ -64,6 +64,7 @@ public abstract class AbstractChannelHandler extends ChannelInboundHandlerAdapte
      * Close EVERY connection
      */
     public void closeConnection(){
+        if (ctx == null) return;
         ctx.channel().close();
     }
 }
