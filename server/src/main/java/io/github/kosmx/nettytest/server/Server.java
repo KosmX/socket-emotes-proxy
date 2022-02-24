@@ -38,9 +38,9 @@ public final class Server {
 
     ChannelFuture channel;
 
-    public Server(){
+    public Server(int port){
         init();
-        run(25564);
+        run(port);
     }
 
     public void init(){
