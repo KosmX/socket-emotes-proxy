@@ -24,4 +24,5 @@ rootProject.name = 'random_server-client'
 include 'common'
 include 'server'
 include 'client'
+include 'package'
 

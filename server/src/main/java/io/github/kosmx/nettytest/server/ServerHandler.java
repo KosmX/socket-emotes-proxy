@@ -20,6 +20,7 @@ public class ServerHandler extends AbstractChannelHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("Disconnected: " + ctx.channel());
         super.channelUnregistered(ctx);
         server.getConnections().remove(this);
     }

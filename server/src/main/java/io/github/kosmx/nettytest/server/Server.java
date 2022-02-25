@@ -6,8 +6,8 @@ import io.github.kosmx.nettytest.common.coders.decoder.MapConsumerDecoder;
 import io.github.kosmx.nettytest.common.protocol.IMessage;
 import io.github.kosmx.nettytest.common.protocol.KeepAliveMessage;
 import io.github.kosmx.nettytest.server.commands.CommandHandler;
+import io.github.kosmx.nettytest.server.packets.StreamedBytes;
 import io.github.kosmx.nettytest.server.test.StreamedMessage;
-import io.github.kosmx.nettytest.server.test.TestTextMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -38,14 +38,15 @@ public final class Server {
 
     ChannelFuture channel;
 
-    public Server(){
+    public Server(int port){
         init();
-        run(25564);
+        run(port);
     }
 
     public void init(){
         this.state = ServerState.INIT;
         protocols.put(9, StreamedMessage::new);
+        protocols.put(16, StreamedBytes::new);
     }
 
     public void run(int port){

@@ -3,10 +3,15 @@ plugins {
     id 'fabric-loom' version '0.11-SNAPSHOT'
 
 }
+apply plugin: "com.github.johnrengelman.shadow"
 
 group 'io.github.kosmx.nettytest'
 version '1.0-SNAPSHOT'
 archivesBaseName = project.archives_base_name
+
+configurations {
+    fatJar
+}
 
 repositories {
     mavenCentral()
@@ -36,14 +41,17 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation project(":common")
+    fatJar(project(':common')) {
+        transitive = false
+    }
     
     //implementation("io.netty:netty-all:4.1.66.Final")
 
     implementation("io.github.kosmx.emotes:emotesAPI:2.1+") //2.1.*
-    modRuntimeOnly 'maven.modrinth:emotecraft:2.1-SNAPSHOT-build.11-MC1.18.1-fabric'
+    modRuntimeOnly 'maven.modrinth:emotecraft:2.1-MC1.18.1-fabric'
     modRuntimeOnly 'io.github.kosmx:bendy-lib:2.0.4'
 
-    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:0.46.4+1.18"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.46.4+1.18"
 
 
 }
@@ -54,6 +62,17 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+}
+
+shadowJar {
+    configurations = [project.configurations.fatJar]
+    classifier "dev"
+}
+
+remapJar {
+    dependsOn shadowJar
+    input.set shadowJar.archiveFile
+    classifier "fabric"
 }
 
 tasks.withType(JavaCompile).configureEach {

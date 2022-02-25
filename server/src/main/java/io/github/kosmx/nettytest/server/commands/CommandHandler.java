@@ -37,7 +37,7 @@ public final class CommandHandler extends Thread {
             String in = scanner.nextLine();
             try {
                 dispatcher.execute(dispatcher.parse(in, commandSource));
-            }catch(CommandSyntaxException exception){
+            }catch(Throwable exception){
                 System.out.println(exception.getMessage());
             }
         }
