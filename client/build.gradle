@@ -6,7 +6,7 @@ plugins {
 apply plugin: "com.github.johnrengelman.shadow"
 
 group 'io.github.kosmx.nettytest'
-version '1.0-SNAPSHOT'
+version rootProject.version
 archivesBaseName = project.archives_base_name
 
 configurations {
@@ -51,7 +51,7 @@ dependencies {
     modRuntimeOnly 'maven.modrinth:emotecraft:2.1-MC1.18.1-fabric'
     modRuntimeOnly 'io.github.kosmx:bendy-lib:2.0.4'
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.46.4+1.18"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 
 }
