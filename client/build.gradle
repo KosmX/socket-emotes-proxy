@@ -1,23 +1,23 @@
 plugins {
-    id 'java'
-    id 'fabric-loom' version '0.11-SNAPSHOT'
-
+    id 'maven-publish'
 }
+
+apply plugin: 'fabric-loom'
 apply plugin: "com.github.johnrengelman.shadow"
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
 group 'io.github.kosmx.nettytest'
 version rootProject.version
-archivesBaseName = project.archives_base_name
 
 configurations {
     fatJar
 }
 
 repositories {
-    mavenCentral()
-    maven {
-        url "https://libraries.minecraft.net"
-    }
+
     maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
@@ -48,7 +48,7 @@ dependencies {
     //implementation("io.netty:netty-all:4.1.66.Final")
 
     implementation("io.github.kosmx.emotes:emotesAPI:2.1+") //2.1.*
-    modRuntimeOnly 'maven.modrinth:emotecraft:2.1-MC1.18.1-fabric'
+    modRuntimeOnly 'maven.modrinth:emotecraft:2.1.3-SNAPSHOT-build.30-MC1.19-fabric'
     modRuntimeOnly 'io.github.kosmx:bendy-lib:2.0.4'
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -67,6 +67,10 @@ processResources {
 shadowJar {
     configurations = [project.configurations.fatJar]
     classifier "dev"
+}
+
+java {
+    withSourcesJar()
 }
 
 remapJar {

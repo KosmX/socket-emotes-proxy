@@ -1,12 +1,7 @@
-buildscript {
-    dependencies {
-        classpath "io.freefair.gradle:lombok-plugin:6.2.0"
-    }
-}
-
 plugins {
-    id 'java'
+    id 'fabric-loom' version '0.12-SNAPSHOT' apply false
     id "com.github.johnrengelman.shadow" version "7.1.2" apply false
+    id "io.freefair.lombok" version "6.5.0-rc1"
 }
 
 group 'io.github.kosmx.nettytest'
@@ -19,23 +14,9 @@ repositories {
 allprojects {
     apply plugin: "io.freefair.lombok"
     repositories {
-        mavenCentral()
         maven {
             name = "KosmX's maven"
             url = "https://maven.kosmx.dev"
         }
-        maven {
-            name "Mojang maven"
-            url "https://libraries.minecraft.net"
-        }
     }
-}
-
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
-
-test {
-    useJUnitPlatform()
 }
