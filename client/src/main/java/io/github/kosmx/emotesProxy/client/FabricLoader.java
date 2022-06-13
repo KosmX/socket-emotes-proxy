@@ -1,13 +1,18 @@
 package io.github.kosmx.emotesProxy.client;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.text.LiteralText;
+import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.text.Text;
 
-import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.*;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 
 public class FabricLoader implements ClientModInitializer {
@@ -17,15 +22,16 @@ public class FabricLoader implements ClientModInitializer {
     public void onInitializeClient() {
         io.github.kosmx.emotes.api.proxy.EmotesProxyManager.registerProxyInstance(proxy);
 
-        this.addCommands();
+        ClientCommandRegistrationCallback.EVENT.register(FabricLoader.this::addCommands);
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> proxy.tick());
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> proxy.disconnect());
     }
 
-    public void addCommands() {
+    public void addCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
 
-        DISPATCHER.register(literal("emoteProxy")
+        dispatcher.register(literal("emoteProxy")
                 .then(literal("state")
                         .executes(context->{
                             var message = "wat?";
@@ -41,7 +47,7 @@ public class FabricLoader implements ClientModInitializer {
                                 message = "EmoteX Proxy is not active";
                             }
 
-                            context.getSource().sendFeedback(new LiteralText(message));
+                            context.getSource().sendFeedback(Text.literal(message));
                             return 0;
                         }))
                 .then(literal("connect")

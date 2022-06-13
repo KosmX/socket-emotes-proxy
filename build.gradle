@@ -7,13 +7,14 @@ plugins {
 group 'io.github.kosmx.nettytest'
 version '0.1.0'
 
-repositories {
-    mavenCentral()
-}
-
 allprojects {
     apply plugin: "io.freefair.lombok"
     repositories {
+        mavenCentral()
+        maven {
+            name "Mojang maven"
+            url "https://libraries.minecraft.net"
+        }
         maven {
             name = "KosmX's maven"
             url = "https://maven.kosmx.dev"
